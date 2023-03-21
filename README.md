@@ -31,3 +31,6 @@
 4.
 5.
 6.
+
+## 6.구조도
+![image](https://user-images.githubusercontent.com/59475851/226532602-435d4077-d8f0-4a77-965a-23c561fc77e3.png)
