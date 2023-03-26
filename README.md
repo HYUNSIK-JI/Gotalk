@@ -41,5 +41,4 @@
 2023-03-26: 메시지 보낸이 출력
 
 ## 8. 배포
-https://www.gotalk.shop 으로 진행 예정
-도메인 구매 완료
+AWS ec2에 도커를 활용 하여 https://www.gotalk.shop 으로 진행 예정 -> 도메인 구매 완료
