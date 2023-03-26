@@ -12,7 +12,6 @@
     {{ room_name|json_script:"room-name" }}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
-
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
@@ -23,7 +22,12 @@
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
+            
+            const new_msg = data.message.split(':')
+            console.log(data.context.username)
+            chatLog = document.querySelector('#chat-log')
+            
+            document.querySelector('#chat-log').value += (data.context.username + ":" + new_msg[0] + '\n');
         };
 
         chatSocket.onclose = function(e) {
@@ -42,6 +46,7 @@
             const message = messageInputDom.value;
             chatSocket.send(JSON.stringify({
                 'message': message
+                
             }));
             messageInputDom.value = '';
         };

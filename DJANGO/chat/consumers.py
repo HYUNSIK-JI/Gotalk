@@ -55,6 +55,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         user = self.scope["user"]
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
+        
         context = {
             "userid": user.pk,
             "username": user.username,
@@ -79,13 +80,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "date": x.strftime("%m월 %d일 %H:%M"),
         }
         message = event["message"]
-
         # Send message to WebSocket
         await self.send(
             text_data=json.dumps(
                 {
                     "message": message,
-                    "context": context,
+                    
                 }
             )
         )
