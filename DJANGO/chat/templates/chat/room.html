@@ -21,13 +21,11 @@
         );
 
         chatSocket.onmessage = function(e) {
+            console.log(e)
             const data = JSON.parse(e.data);
-            
-            const new_msg = data.message.split(':')
-            console.log(data.context.username)
+            console.log(data)
             chatLog = document.querySelector('#chat-log')
-            
-            document.querySelector('#chat-log').value += (data.context.username + ":" + new_msg[0] + '\n');
+            document.querySelector('#chat-log').value += (data.message + '\n');
         };
 
         chatSocket.onclose = function(e) {

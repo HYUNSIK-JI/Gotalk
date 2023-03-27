@@ -6,6 +6,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth import get_user_model
 
 x = datetime.datetime.now()
+plus = datetime.timedelta(hours=9) 
 connected_user = []
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -54,7 +55,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         user = self.scope["user"]
         text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
+        data = x + plus
+        data = data.strftime("%m월 %d일 %H:%M")
+        message = user.username + ":" + text_data_json["message"] + data
         
         context = {
             "userid": user.pk,
