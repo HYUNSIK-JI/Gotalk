@@ -6,10 +6,13 @@
     <title>Chat Room</title>
 </head>
 <body>
+    
     <textarea id="chat-log" cols="100" rows="20"></textarea><br>
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
+    {{ username|json_script:"username" }}
+    <input id="request_user_pk" type="hidden" value="{{ request.user.pk }}">
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
         const chatSocket = new WebSocket(
@@ -21,11 +24,39 @@
         );
 
         chatSocket.onmessage = function(e) {
-            console.log(e)
+            
             const data = JSON.parse(e.data);
-            console.log(data)
+            
             chatLog = document.querySelector('#chat-log')
-            document.querySelector('#chat-log').value += (data.message + '\n');
+            chatLog.scrollTop = chatLog.scrollHeight
+            const request_user_pk = document.querySelector('#request_user_pk').value;
+            console.log(request_user_pk)
+            if (request_user_pk == data.context.user_pk) {
+                console.log(2)
+                if (data.message === "님이 입장하셨습니다" || data.message === "님이 퇴장하셨습니다") {
+                    document.querySelector('#chat-log').value += (data.context.username + data.message + '\n');
+                }
+                else{
+                    const chat = document.querySelector('#chat-log');
+                    const p = data.context.username + ":" + data.message + '\n';
+                    console.log(p)
+                    p.style.cssText = "display: flex flex-direction: row-reverse"
+                    document.querySelector('#chat-log').value += p;
+                }
+            }
+            else {
+                console.log(3)
+                if (data.message === "님이 입장하셨습니다" || data.message === "님이 퇴장하셨습니다") {
+                    document.querySelector('#chat-log').value += (data.context.username + data.message + '\n');
+                }
+                else{
+                    const chat = document.querySelector('#chat-log');
+                    const p = data.context.username + ":" + data.message + '\n';
+                    console.log(p)
+                    // p.style.color  = "display: flex flex-direction: row-reverse"
+                    document.querySelector('#chat-log').value += p;
+                }
+            }
         };
 
         chatSocket.onclose = function(e) {

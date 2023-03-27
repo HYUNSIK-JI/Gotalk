@@ -48,3 +48,8 @@ def login(request):
 def logout(request):
     my_logout(request)
     return redirect("accounts:signup")
+
+@login_required
+def detail(request, pk):
+    user = get_user_model().objects.get(pk=pk)
+    pass

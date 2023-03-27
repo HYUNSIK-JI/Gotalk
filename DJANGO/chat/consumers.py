@@ -23,7 +23,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             pass
         else:
             connected_user.append(username)
-            message = username + "님이 입장하셨습니다"
+            message = "님이 입장하셨습니다"
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -41,7 +41,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             pass
         else:
             connected_user.remove(username)
-            message = username + "님이 퇴장하셨습니다"
+            message = "님이 퇴장하셨습니다"
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -55,16 +55,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         user = self.scope["user"]
         text_data_json = json.loads(text_data)
-        data = x + plus
-        data = data.strftime("%m월 %d일 %H:%M")
-        message = user.username + ":" + text_data_json["message"] + data
+        print(text_data_json, 12)
+        date = x + plus
+        date = date.strftime("%m월 %d일 %H:%M")
+        message = text_data_json["message"]
         
         context = {
             "userid": user.pk,
             "username": user.username,
             "first_name": user.first_name,
             "last_name": user.last_name,
-            "date": x.strftime("%m월 %d일 %H:%M"),
+            "date": date,
         }
         # Send message to room group
         await self.channel_layer.group_send(
@@ -88,7 +89,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             text_data=json.dumps(
                 {
                     "message": message,
-                    
+                    "context": context,
                 }
             )
         )
