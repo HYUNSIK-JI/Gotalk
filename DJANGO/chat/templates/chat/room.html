@@ -4,10 +4,34 @@
 <head>
     <meta charset="utf-8"/>
     <title>Chat Room</title>
+    <style>
+        .me {
+            display: flex;
+            flex-direction: column;
+            color: red;
+        }
+        .you {
+            display: flex;
+            flex-direction: row-reverse;
+            color: blue;
+        }
+        .chat-body-area {
+            margin: 2rem auto;
+            width: 100%;
+            height: 50vh;
+            border-radius: 20px;
+            padding: 1rem;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+            background-color: var(--bg);
+        }
+    </style>
 </head>
 <body>
-    
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+    <!-- <textarea id="chat-log" cols="100" rows="20"></textarea><br> -->
+    <div class="chat-body-area">
+        <ul class="chat-message-list">
+        </ul>
+    </div>
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
@@ -27,34 +51,37 @@
             
             const data = JSON.parse(e.data);
             
-            chatLog = document.querySelector('#chat-log')
-            chatLog.scrollTop = chatLog.scrollHeight
+            chatLog = document.querySelector('.chat-message-list')
             const request_user_pk = document.querySelector('#request_user_pk').value;
-            console.log(request_user_pk)
-            if (request_user_pk == data.context.user_pk) {
-                console.log(2)
+            
+            let chatBodyArea = document.querySelector('.chat-body-area');
+            chatBodyArea.classList.add('chat-body-area')
+            chatBodyArea.scrollTop = chatBodyArea.scrollHeight;
+
+            const a = document.createElement('div');
+
+            if (request_user_pk == data.context.userid) {
                 if (data.message === "님이 입장하셨습니다" || data.message === "님이 퇴장하셨습니다") {
-                    document.querySelector('#chat-log').value += (data.context.username + data.message + '\n');
+                    chatLog.append(data.context.username + data.message);
                 }
                 else{
                     const chat = document.querySelector('#chat-log');
                     const p = data.context.username + ":" + data.message + '\n';
-                    console.log(p)
-                    p.style.cssText = "display: flex flex-direction: row-reverse"
-                    document.querySelector('#chat-log').value += p;
+                    a.append(p);
+                    a.classList.add('me');
+                    chatLog.append(a);
                 }
             }
             else {
-                console.log(3)
                 if (data.message === "님이 입장하셨습니다" || data.message === "님이 퇴장하셨습니다") {
-                    document.querySelector('#chat-log').value += (data.context.username + data.message + '\n');
+                    chatLog.append(data.context.username + data.message);
                 }
                 else{
                     const chat = document.querySelector('#chat-log');
                     const p = data.context.username + ":" + data.message + '\n';
-                    console.log(p)
-                    // p.style.color  = "display: flex flex-direction: row-reverse"
-                    document.querySelector('#chat-log').value += p;
+                    a.append(p);
+                    a.classList.add('you');
+                    chatLog.append(a);
                 }
             }
         };
