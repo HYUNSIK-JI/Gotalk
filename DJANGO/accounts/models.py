@@ -5,4 +5,4 @@ from Gotalk.settings import AUTH_USER_MODEL
 # Create your models here.
 
 class User(AbstractUser):
-    pass
+    block = models.ManyToManyField("self", symmetrical=False, related_name="block_system")

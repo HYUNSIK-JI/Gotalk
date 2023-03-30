@@ -5,11 +5,19 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model, login as my_login, logout as my_logout
+from django.http import JsonResponse
 from .forms import CreateUser
 from .models import User
 
 
 # Create your views here..
+
+def index(request):
+    users = User.objects.all()
+    context  = {
+        "users": users,
+    }
+    return render(request, "accounts/main.html", context)
 
 def signup(request):
     if request.method == "POST":
@@ -17,7 +25,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             my_login(request, user)
-            return redirect(request, "accounts/login.html")
+            return redirect(reverse('login'))
 
     else:
         form = CreateUser()
@@ -52,4 +60,39 @@ def logout(request):
 @login_required
 def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
-    pass
+    context = {
+        "user": user,
+        "block_system": user.block_system.all(),
+        "block": user.block.all(),
+    }
+    return render(request, "accounts/detail.html", context)
+
+
+@login_required
+def block(request, pk):
+    if request.user.is_authenticated:
+        user = User.objects.get(pk=pk)
+        if user != request.user:
+            if user.block_system.filter(pk=request.user.pk).exists():
+                user.block_system.remove(request.user)
+                is_block = False
+            else:
+                user.block_system.add(request.user)
+                is_block = True
+            
+            blocks = user.block_system.all()
+            f_datas = []
+            for block in blocks:
+                f_datas.append(
+                    {
+                        "block_pk": block.pk,
+                        "block_name": block.username,
+                    }
+                )
+            data = {
+                "is_block": is_block,
+                "f_datas": f_datas,
+            }
+            return JsonResponse(data)
+        return redirect("accounts:detail", user.username)
+    return redirect("accounts:login")
