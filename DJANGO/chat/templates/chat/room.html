@@ -125,10 +125,13 @@
     <input id="request_user_username" type="hidden" value="{{ request.user.username }}">
     {{ room_name|json_script:"room-name" }}
     {{ context|json_script:"context" }}
-    
+    {{ block|json_script:"block" }}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
         const context = JSON.parse(document.getElementById('context').textContent);
+        const block = JSON.parse(document.getElementById('block').textContent);
+
+        
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
@@ -166,15 +169,20 @@
             `);
             }
             else {
-                chatLog.insertAdjacentHTML("beforeend", `
-                <li class="chat-message others">
-                  <div class="user-field">
-                    <img src="${userImage}" width="40" height="40" class="userpf" alt="">
-                    <h6>${nickname}</h6>
-                  </div>
-                  <div class="message-area">${message}</div>
-                </li>
-            `);
+                if (block.includes(nickname)) {
+                    chatLog.insertAdjacentHTML("beforeend", ``);
+                }
+                else {
+                    chatLog.insertAdjacentHTML("beforeend", `
+                    <li class="chat-message others">
+                        <div class="user-field">
+                            <img src="${userImage}" width="40" height="40" class="userpf" alt="">
+                            <h6>${nickname}</h6>
+                        </div>
+                        <div class="message-area">${message}</div>
+                    </li>
+                    `);
+                }
             }
             //tag = (nickname == `{{ nickname }}`) ? tag.replace("chat-message others", "chat-message") : tag;
             //chatLog.insertAdjacentHTML("beforeend", tag);

@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from accounts.models import *
 import datetime
 
 def index(request):
@@ -27,6 +28,11 @@ def index(request):
 @login_required
 def room(request, room_name):
     user = request.user
+    block = []
+    blocks = user.block.all()
+
+    for i in blocks:
+        block.append(i.username)
     # 로그인 검증 및 스터디원 여부 파악
     if user.is_authenticated:
         nickname = user.username
@@ -40,4 +46,4 @@ def room(request, room_name):
         "memberimg": memberimg,
     }
 
-    return render(request, "chat/room.html", {"room_name": room_name, "context": context})
+    return render(request, "chat/room.html", {"room_name": room_name, "context": context, "block":block,})
