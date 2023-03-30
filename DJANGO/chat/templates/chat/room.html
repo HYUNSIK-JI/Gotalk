@@ -62,6 +62,7 @@
             margin-bottom: 0.8rem;
         }
         .chat-message.others {
+            display:flex;
             flex-direction: row;
             align-items: center;
             margin-bottom: 0.8rem;
@@ -120,9 +121,11 @@
     </div>
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
+
+    <input id="request_user_username" type="hidden" value="{{ request.user.username }}">
     {{ room_name|json_script:"room-name" }}
     {{ context|json_script:"context" }}
-    <input id="request_user_pk" type="hidden" value="{{ request.user.pk }}">
+    
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
         const context = JSON.parse(document.getElementById('context').textContent);
@@ -140,16 +143,30 @@
     
             // Line Feed check
             let message = (data.message.includes('\n')) ? data.message.replace("\n", "") : data.message;
-
-            console.log(data)
-            console.log(context)
+            
             // ready for user data
-            const userImage = context.memberimg
-            const nickname = context.nickname
+            
+            
+            const userImage = data.message.split(" : ")[2];
+            const nickname = data.message.split(" : ")[0];
             message = data.message.split(" : ")[1];
-    
+            
+            const request_nickname = document.querySelector('#request_user_username').value;
+
             // add message
-            let tag = `
+            if (request_nickname == nickname) {
+                chatLog.insertAdjacentHTML("beforeend", `
+                <li class="chat-message">
+                  <div class="user-field">
+                    <img src="${userImage}" width="40" height="40" class="userpf" alt="">
+                    <h6>${nickname}</h6>
+                  </div>
+                  <div class="message-area">${message}</div>
+                </li>
+            `);
+            }
+            else {
+                chatLog.insertAdjacentHTML("beforeend", `
                 <li class="chat-message others">
                   <div class="user-field">
                     <img src="${userImage}" width="40" height="40" class="userpf" alt="">
@@ -157,9 +174,10 @@
                   </div>
                   <div class="message-area">${message}</div>
                 </li>
-            `;
-            tag = (nickname == "{{ nickname }}") ? tag.replace("chat-message others", "chat-message") : tag;
-            chatLog.insertAdjacentHTML("beforeend", tag);
+            `);
+            }
+            //tag = (nickname == `{{ nickname }}`) ? tag.replace("chat-message others", "chat-message") : tag;
+            //chatLog.insertAdjacentHTML("beforeend", tag);
     
             // scrolling
             let chatBodyArea = document.querySelector('.chat-body-area');
@@ -180,9 +198,10 @@
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
             if(messageInputDom.value !== ""){
-              const message = "{{ nickname }}" + " : " +  messageInputDom.value + " : " + "{{ memberimg }}";
+              const message = context.nickname + " : " +  messageInputDom.value + " : " + context.memberimg;
+              
               chatSocket.send(JSON.stringify({
-                  'message': message
+                  'message': message,
               }));
             }
             messageInputDom.value = '';
