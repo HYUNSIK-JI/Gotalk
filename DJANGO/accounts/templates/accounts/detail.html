@@ -1,3 +1,4 @@
+{% load django_bootstrap5 %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +34,8 @@
             <button type="button" id="block-btn" data-user-id="{{ user.pk }}" class="block-button">차단 하기</button>
           {% else %}
             <button type="button" id="block-btn" data-user-id="{{ user.pk }}" class="unblock-button">차단 취소</button>
-        {% endif %}
+          {% endif %}
+            <a href="{% url 'chat:room' chatroom %}">대화 하기</a>
           {% endif %}
         </div>
     </div>

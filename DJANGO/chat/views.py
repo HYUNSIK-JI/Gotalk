@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from Gotalk.settings import CACHES
 from accounts.models import *
 import datetime
 
@@ -27,13 +28,22 @@ def index(request):
 
 @login_required
 def room(request, room_name):
+    r = request.path
+    r = r.split("/")
+    rr = r[2].split("Gotalk")
+    
+
+    send = rr[0]
+    receive = rr[1]
+
     user = request.user
     block = []
     blocks = user.block.all()
 
+    w = CACHES.get(str(r[2]))
     for i in blocks:
         block.append(i.username)
-    # 로그인 검증 및 스터디원 여부 파악
+    
     if user.is_authenticated:
         nickname = user.username
         memberimg = 'https://dummyimage.com/150x150'
@@ -44,6 +54,7 @@ def room(request, room_name):
     context = {
         "nickname": nickname,
         "memberimg": memberimg,
+        "w":w,
     }
 
     return render(request, "chat/room.html", {"room_name": room_name, "context": context, "block":block,})

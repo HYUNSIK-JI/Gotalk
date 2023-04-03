@@ -131,7 +131,7 @@
         const context = JSON.parse(document.getElementById('context').textContent);
         const block = JSON.parse(document.getElementById('block').textContent);
 
-        
+        console.log(context, 111)
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host

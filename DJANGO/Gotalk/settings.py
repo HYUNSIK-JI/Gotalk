@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'chat',
     'corsheaders',
     'accounts',
+    'django_bootstrap5',
     #'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -119,6 +120,17 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# Redis Cache
+CACHES  = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

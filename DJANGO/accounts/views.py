@@ -60,10 +60,16 @@ def logout(request):
 @login_required
 def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
+    room = ""
+    room += str(user.pk)
+    room += "Gotalk"
+    room += str(request.user.pk)
+
     context = {
         "user": user,
         "block_system": user.block_system.all(),
         "block": user.block.all(),
+        "chatroom":room,
     }
     return render(request, "accounts/detail.html", context)
 

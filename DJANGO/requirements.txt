@@ -36,3 +36,4 @@ typing_extensions==4.5.0
 virtualenv==20.17.1
 whitenoise==6.4.0
 zope.interface==5.5.2
+django-bootstrap5==22.1

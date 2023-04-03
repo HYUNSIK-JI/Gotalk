@@ -1,7 +1,8 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
+from Gotalk.settings import CACHES
 import json
 
-
+aa = []
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
@@ -22,7 +23,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
-
+        
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name, {"type": "chat_message", "message": message}
@@ -33,5 +34,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event["message"]
 
+        r = self.room_name
+        aa.append(json.dumps({"message": message}))
+        
+        CACHES[r] = aa
         # Send message to WebSocket
         await self.send(text_data=json.dumps({"message": message}))
