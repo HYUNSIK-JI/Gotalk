@@ -29,7 +29,7 @@
 1. nginx 설정 이후 socket 연결 끊김 (2023-03-21) -> 원인 : CORS, 문제 해결: nginx 설정 CORS 설정 추가
 2. redis 기본 설정 중 bind 부분이 배포 중인 주소와 일치 하지 않아 채팅 불가 현상 -> redis 설정 파일 중 bind default 값 변경 -> 127.0.0.1 -> 0.0.0.0 ::1
 3. 채팅 중 상대방 채팅 과 나의 채팅을 구별이 필요 했다 -> 원인: 비교 대상이 정확하지 않아 구별 하지 못했다. 문제 해결:views.py 통해 html로 전달 되는 데이터중 request.user을 통해 username 전달, 웹 소켓을 채팅을 전송 할때 전달 받은 usernanme을 같이 전달 전달 받은 두개의 값을 비교 하여 css을 다르게 주어 위치상으로 채팅 구별 완료
-4.
+4. 채팅 내용 Redis의 캐시메모리로 저장 중 Prefix must be unicode 오류 발견
 5.
 6.
 
