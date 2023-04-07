@@ -41,6 +41,8 @@ def room(request, room_name):
     blocks = user.block.all()
 
     w = CACHES.get(str(r[2]))
+    if w:
+        print(w)
     for i in blocks:
         block.append(i.username)
     
