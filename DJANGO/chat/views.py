@@ -41,8 +41,10 @@ def room(request, room_name):
     blocks = user.block.all()
 
     w = CACHES.get(str(r[2]))
+    check = 1
     if w:
         print(w)
+        check = 0
     for i in blocks:
         block.append(i.username)
     
@@ -57,6 +59,7 @@ def room(request, room_name):
         "nickname": nickname,
         "memberimg": memberimg,
         "w":w,
+        "check":check,
     }
 
     return render(request, "chat/room.html", {"room_name": room_name, "context": context, "block":block,})

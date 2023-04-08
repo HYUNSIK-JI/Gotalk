@@ -154,41 +154,9 @@
             const nickname = data.message.split(" : ")[0];
             message = data.message.split(" : ")[1];
             
+            console.log(context, 999)
             const request_nickname = document.querySelector('#request_user_username').value;
-
-            if (context.w === 'Null') {
-                // add message
-                console.log(12)
-                if (request_nickname == nickname) {
-                    chatLog.insertAdjacentHTML("beforeend", `
-                    <li class="chat-message">
-                    <div class="user-field">
-                        <img src="${userImage}" width="40" height="40" class="userpf" alt="">
-                        <h6>${nickname}</h6>
-                    </div>
-                    <div class="message-area">${message}</div>
-                    </li>
-                `);
-                }
-                else {
-                    if (block.includes(nickname)) {
-                        chatLog.insertAdjacentHTML("beforeend", ``);
-                    }
-                    else {
-                        chatLog.insertAdjacentHTML("beforeend", `
-                        <li class="chat-message others">
-                            <div class="user-field">
-                                <img src="${userImage}" width="40" height="40" class="userpf" alt="">
-                                <h6>${nickname}</h6>
-                            </div>
-                            <div class="message-area">${message}</div>
-                        </li>
-                        `);
-                    }
-                }
-            }
-            else {
-                console.log(message, 4567865485)
+            if (context.w != null && context.w.length >= 1 && context.check === 0) {
                 for(let i = 0; i < context.w.length; i++) {
                     //console.log(context.w[i])
                     const k = context.w[i].split("message")[1].split(" : ")
@@ -197,7 +165,7 @@
                     const n = ms[0].replace(": ", "")
 
                     const name = n.slice(2, n.length)
-                    const mess = ms[1];
+                    const mess = escape(ms[1]);
                     const im = ms[2];
 
                     //console.log(name, mess, im)
@@ -228,8 +196,139 @@
                             `);
                         }
                     }
+                }
+                context.check = 1;
             }
+            else {
+                if (request_nickname == nickname) {
+                    chatLog.insertAdjacentHTML("beforeend", `
+                    <li class="chat-message">
+                    <div class="user-field">
+                        <img src="${userImage}" width="40" height="40" class="userpf" alt="">
+                        <h6>${nickname}</h6>
+                    </div>
+                    <div class="message-area">${message}</div>
+                    </li>
+                `);
+                }
+                else {
+                    if (block.includes(nickname)) {
+                        chatLog.insertAdjacentHTML("beforeend", ``);
+                    }
+                    else {
+                        chatLog.insertAdjacentHTML("beforeend", `
+                        <li class="chat-message others">
+                            <div class="user-field">
+                                <img src="${userImage}" width="40" height="40" class="userpf" alt="">
+                                <h6>${nickname}</h6>
+                            </div>
+                            <div class="message-area">${message}</div>
+                        </li>
+                        `);
+                    }
+                }
             }
+            // if (context.w === 'Null') {
+            //     // add message
+            //     console.log(12)
+            //     if (request_nickname == nickname) {
+            //         chatLog.insertAdjacentHTML("beforeend", `
+            //         <li class="chat-message">
+            //         <div class="user-field">
+            //             <img src="${userImage}" width="40" height="40" class="userpf" alt="">
+            //             <h6>${nickname}</h6>
+            //         </div>
+            //         <div class="message-area">${message}</div>
+            //         </li>
+            //     `);
+            //     }
+            //     else {
+            //         if (block.includes(nickname)) {
+            //             chatLog.insertAdjacentHTML("beforeend", ``);
+            //         }
+            //         else {
+            //             chatLog.insertAdjacentHTML("beforeend", `
+            //             <li class="chat-message others">
+            //                 <div class="user-field">
+            //                     <img src="${userImage}" width="40" height="40" class="userpf" alt="">
+            //                     <h6>${nickname}</h6>
+            //                 </div>
+            //                 <div class="message-area">${message}</div>
+            //             </li>
+            //             `);
+            //         }
+            //     }
+            // }
+            // else {
+            //     console.log(message, 4567865485)
+            //     for(let i = 0; i < context.w.length; i++) {
+            //         //console.log(context.w[i])
+            //         const k = context.w[i].split("message")[1].split(" : ")
+            //         let ms = (k.includes('\n')) ? k.replace("\n", "") : k;
+            //         //console.log(ms)
+            //         const n = ms[0].replace(": ", "")
+
+            //         const name = n.slice(2, n.length)
+            //         const mess = unescape(ms[1]);
+            //         const im = ms[2];
+
+            //         //console.log(name, mess, im)
+            //         if (request_nickname == nickname) {
+            //             chatLog.insertAdjacentHTML("beforeend", `
+            //             <li class="chat-message">
+            //             <div class="user-field">
+            //                 <img src="${im}" width="40" height="40" class="userpf" alt="">
+            //                 <h6>${name}</h6>
+            //             </div>
+            //             <div class="message-area">${mess}</div>
+            //             </li>
+            //         `);
+            //         }
+            //         else {
+            //             if (block.includes(nickname)) {
+            //                 chatLog.insertAdjacentHTML("beforeend", ``);
+            //             }
+            //             else {
+            //                 chatLog.insertAdjacentHTML("beforeend", `
+            //                 <li class="chat-message others">
+            //                     <div class="user-field">
+            //                         <img src="${im}" width="40" height="40" class="userpf" alt="">
+            //                         <h6>${name}</h6>
+            //                     </div>
+            //                     <div class="message-area">${mess}</div>
+            //                 </li>
+            //                 `);
+            //             }
+            //         }
+            //     }
+            // }
+            // if (request_nickname == nickname) {
+            //         chatLog.insertAdjacentHTML("beforeend", `
+            //         <li class="chat-message">
+            //         <div class="user-field">
+            //             <img src="${userImage}" width="40" height="40" class="userpf" alt="">
+            //             <h6>${nickname}</h6>
+            //         </div>
+            //         <div class="message-area">${message}</div>
+            //         </li>
+            //     `);
+            //     }
+            //     else {
+            //         if (block.includes(nickname)) {
+            //             chatLog.insertAdjacentHTML("beforeend", ``);
+            //         }
+            //         else {
+            //             chatLog.insertAdjacentHTML("beforeend", `
+            //             <li class="chat-message others">
+            //                 <div class="user-field">
+            //                     <img src="${userImage}" width="40" height="40" class="userpf" alt="">
+            //                     <h6>${nickname}</h6>
+            //                 </div>
+            //                 <div class="message-area">${message}</div>
+            //             </li>
+            //             `);
+            //         }
+            //     }
             //tag = (nickname == `{{ nickname }}`) ? tag.replace("chat-message others", "chat-message") : tag;
             //chatLog.insertAdjacentHTML("beforeend", tag);
     
