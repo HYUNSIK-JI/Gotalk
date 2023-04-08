@@ -34,8 +34,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event["message"]
         r = self.room_name
-        aa.append(json.dumps({"message": message}))
+        aa.append(json.dumps({"message": message}, ensure_ascii=False))
         
         CACHES[r] = aa
         # Send message to WebSocket
-        await self.send(text_data=json.dumps({"message": message}))
+        await self.send(text_data=json.dumps({"message": message}, ensure_ascii=False))

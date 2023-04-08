@@ -146,7 +146,7 @@
     
             // Line Feed check
             let message = (data.message.includes('\n')) ? data.message.replace("\n", "") : data.message;
-            
+            console.log(message, 1)
             // ready for user data
             
             
@@ -154,7 +154,6 @@
             const nickname = data.message.split(" : ")[0];
             message = data.message.split(" : ")[1];
             
-            console.log(context, 999)
             const request_nickname = document.querySelector('#request_user_username').value;
             if (context.w != null && context.w.length >= 1 && context.check === 0) {
                 for(let i = 0; i < context.w.length; i++) {
@@ -165,7 +164,7 @@
                     const n = ms[0].replace(": ", "")
 
                     const name = n.slice(2, n.length)
-                    const mess = escape(ms[1]);
+                    const mess = ms[1];
                     const im = ms[2];
 
                     //console.log(name, mess, im)
