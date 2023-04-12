@@ -21,7 +21,7 @@
 4) WebSocket
 5) MySQL
 6) Redis
-
+7) k8s
 ## 4. ERD
 
 
